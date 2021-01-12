@@ -16,7 +16,7 @@ import {
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
-import { HttpErrorResponseDto } from 'src/utils/errors/http.dto';
+import { HttpErrorResponseDto } from '../utils/errors/http.dto';
 import { CreateOrderDto } from './dto/createOrder.dto';
 import { OrderDto } from './dto/order.dto';
 import { UpdateOrderDto } from './dto/updateOrder.dto';
@@ -53,7 +53,7 @@ export class OrdersController {
   })
   @ApiQuery({ name: 'code', required: false, type: [String] })
   @Get()
-  async getOrders(@Query('code') code: Array<string>): Promise<Order[]> {
+  async findAll(@Query('code') code: Array<string>): Promise<Order[]> {
     return this.ordersService.findAll(code);
   }
 
@@ -117,7 +117,7 @@ export class OrdersController {
   })
   @ApiParam({ name: 'id', description: 'id of order' })
   @Patch(':id')
-  async patch(
+  async update(
     @Param('id') id: string,
     @Body() order: UpdateOrderDto,
   ): Promise<Order> {

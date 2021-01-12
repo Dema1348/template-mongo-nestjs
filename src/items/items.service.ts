@@ -15,7 +15,11 @@ export class ItemsService {
     return createdItem.save();
   }
 
-  async findAll(stock: number, tags: string, name: string): Promise<Item[]> {
+  async findAll(
+    stock: string,
+    tags: Array<string>,
+    name: string,
+  ): Promise<Item[]> {
     const filters: any = {};
     if (stock) {
       filters.stock = stock;
@@ -38,15 +42,19 @@ export class ItemsService {
   }
 
   async delete(id: string): Promise<Item> {
-    return this.itemModel
-      .findByIdAndRemove(id)
-      .orFail(new Error('No docs found!'));
+    const doc = await this.itemModel.findByIdAndRemove(id);
+    if (!doc) {
+      throw new HttpException(NOT_FOUND_ERROR.message, NOT_FOUND_ERROR.status);
+    }
+    return doc;
   }
 
   async update(id: string, item: Item): Promise<Item> {
-    return this.itemModel
-      .findByIdAndUpdate(id, item, { new: true })
-      .orFail(new Error('No docs found!'));
+    const doc = await this.itemModel.findByIdAndUpdate(id, item, { new: true });
+    if (!doc) {
+      throw new HttpException(NOT_FOUND_ERROR.message, NOT_FOUND_ERROR.status);
+    }
+    return doc;
   }
 
   async count(): Promise<number> {

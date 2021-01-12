@@ -21,6 +21,7 @@ export class OrdersService {
     if (code) {
       filters.code = { $in: code };
     }
+
     return this.orderModel.find(filters).populate('items');
   }
 
@@ -33,15 +34,21 @@ export class OrdersService {
   }
 
   async delete(id: string): Promise<Order> {
-    return this.orderModel
-      .findByIdAndRemove(id)
-      .orFail(new Error('No docs found!'));
+    const doc = await this.orderModel.findByIdAndRemove(id);
+    if (!doc) {
+      throw new HttpException(NOT_FOUND_ERROR.message, NOT_FOUND_ERROR.status);
+    }
+    return doc;
   }
 
   async update(id: string, order: Order): Promise<Order> {
-    return this.orderModel
-      .findByIdAndUpdate(id, order, { new: true })
-      .orFail(new Error('No docs found!'));
+    const doc = await this.orderModel.findByIdAndUpdate(id, order, {
+      new: true,
+    });
+    if (!doc) {
+      throw new HttpException(NOT_FOUND_ERROR.message, NOT_FOUND_ERROR.status);
+    }
+    return doc;
   }
 
   async count(): Promise<number> {

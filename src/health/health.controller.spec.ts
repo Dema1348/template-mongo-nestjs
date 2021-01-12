@@ -1,4 +1,4 @@
-import { TerminusModule } from '@nestjs/terminus';
+import { ConfigService } from '@nestjs/config';
 import { Test, TestingModule } from '@nestjs/testing';
 import { HealthController } from './health.controller';
 import { HealthService } from './health.service';
@@ -8,9 +8,9 @@ describe('HealthController', () => {
 
   beforeEach(async () => {
     const app: TestingModule = await Test.createTestingModule({
-      imports: [TerminusModule],
+      imports: [],
       controllers: [HealthController],
-      providers: [HealthService],
+      providers: [HealthService, ConfigService],
     }).compile();
 
     healthController = app.get<HealthController>(HealthController);
@@ -24,10 +24,6 @@ describe('HealthController', () => {
     it('should return health', () => {
       expect(healthController.getHealthCheck().service).toBe('ms-template');
       expect(healthController.getHealthCheck().environment).toBe('test');
-    });
-
-    it('should return health dns', async () => {
-      expect((await healthController.getCheckDns()).status).toBe('ok');
     });
   });
 });

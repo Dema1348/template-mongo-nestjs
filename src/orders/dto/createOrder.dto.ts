@@ -6,7 +6,7 @@ import {
   MaxLength,
   MinLength,
 } from 'class-validator';
-import { Item } from 'src/items/items.model';
+import { Item } from '../../items/items.model';
 
 export class CreateOrderDto {
   @ApiProperty({

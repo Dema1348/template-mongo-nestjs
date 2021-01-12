@@ -55,9 +55,9 @@ export class ItemsController {
   @ApiQuery({ name: 'tags', required: false, type: [String] })
   @ApiQuery({ name: 'name', required: false })
   @Get()
-  async getItems(
-    @Query('stock') stock: number,
-    @Query('tags') tags: string,
+  async findAll(
+    @Query('stock') stock: string,
+    @Query('tags') tags: Array<string>,
     @Query('name') name: string,
   ): Promise<Item[]> {
     return this.itemsService.findAll(stock, tags, name);
@@ -123,7 +123,7 @@ export class ItemsController {
   })
   @ApiParam({ name: 'id', description: 'id of item' })
   @Patch(':id')
-  async patch(
+  async update(
     @Param('id') id: string,
     @Body() item: UpdateItemDto,
   ): Promise<Item> {
